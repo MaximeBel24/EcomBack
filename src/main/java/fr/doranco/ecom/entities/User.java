@@ -1,4 +1,4 @@
-package fr.doranco.ecom.entity;
+package fr.doranco.ecom.entities;
 
 import fr.doranco.ecom.enums.UserRole;
 import jakarta.persistence.*;
