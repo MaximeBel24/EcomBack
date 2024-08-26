@@ -28,18 +28,17 @@ public class SimpleCorsFilter implements Filter {
     @Value("${api.client.url}")
     private String clientAppUrl;
 
-    private final List<String> allowedOrigins;
-
-    public SimpleCorsFilter() {
-        // Initialize allowed origins list based on the clientAppUrl property
-        this.allowedOrigins = Arrays.asList(clientAppUrl);
-    }
+    private List<String> allowedOrigins;
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
             throws IOException, ServletException {
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         HttpServletRequest request = (HttpServletRequest) servletRequest;
+
+        if (allowedOrigins == null) {
+            allowedOrigins = Arrays.asList(clientAppUrl);
+        }
 
         String originHeader = request.getHeader("Origin");
 
