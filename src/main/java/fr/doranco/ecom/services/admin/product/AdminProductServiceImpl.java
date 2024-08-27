@@ -34,8 +34,10 @@ public class AdminProductServiceImpl implements AdminProductService {
         return productRepository.save(product).getDto();
     }
 
-    public List<ProductDto> getAllpRODUCTS(){
+    @Override
+    public List<ProductDto> getAllProducts() {
         List<Product> products = productRepository.findAll();
         return products.stream().map(Product::getDto).collect(Collectors.toList());
     }
+
 }
