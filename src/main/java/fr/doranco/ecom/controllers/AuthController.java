@@ -42,7 +42,7 @@ public class AuthController {
     public static final String TOKEN_PREFIX = "Bearer ";
     public static final String HEADER_STRING = "Authorization";
 
-    @PostMapping("/authenticate")
+    @PostMapping("/login")
     public void createAuthentication(@RequestBody AuthRequest authRequest, HttpServletResponse response) throws IOException, JSONException {
 
         try {
@@ -65,7 +65,9 @@ public class AuthController {
                     .put("role", optionalUser.get().getRole())
                     .toString()
             );
-
+            response.addHeader("Access-Control-Expose-Headers", "Authorization");
+            response.addHeader("Access-Control-Allow-Headers", "Authorization, X-PINGOTHER, Origin, " +
+                    "X-Requested-With, Content-Type, Accept, X-Custom-header");
             response.addHeader(HEADER_STRING, TOKEN_PREFIX + jwt);
         }
     }
