@@ -40,4 +40,10 @@ public class AdminProductServiceImpl implements AdminProductService {
         return products.stream().map(Product::getDto).collect(Collectors.toList());
     }
 
+    @Override
+    public List<ProductDto> getAllProductByName(String name) {
+        List<Product> products = productRepository.findAllByNameContaining(name);
+        return products.stream().map(Product::getDto).collect(Collectors.toList());
+    }
+
 }
