@@ -2,6 +2,7 @@ package fr.doranco.ecom.controllers.customer;
 
 import fr.doranco.ecom.dto.AddProductInCartDto;
 import fr.doranco.ecom.dto.OrderDto;
+import fr.doranco.ecom.exceptions.ValidationException;
 import fr.doranco.ecom.services.customer.cart.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,5 +25,15 @@ public class CartController {
     public ResponseEntity<?> getCartByUserId(@PathVariable Long userId){
         OrderDto orderDto = cartService.getCartByUserId(userId);
         return ResponseEntity.status(HttpStatus.OK).body(orderDto);
+    }
+
+    @GetMapping("/coupon/{userId}/{code}")
+    public ResponseEntity<?> applyCoupon(@PathVariable Long userId, @PathVariable String code){
+        try {
+            OrderDto orderDto = cartService.applyCoupon(userId, code);
+            return ResponseEntity.ok(orderDto);
+        } catch (ValidationException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 }
