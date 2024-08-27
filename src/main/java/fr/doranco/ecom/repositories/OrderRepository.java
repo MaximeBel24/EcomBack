@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
 
-    Order findByUserIdAndStatus(Long userId, OrderStatus orderStatus);
+    Order findByUserIdAndOrderStatus(Long userId, OrderStatus orderStatus);
 }

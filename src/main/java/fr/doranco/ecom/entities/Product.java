@@ -20,20 +20,20 @@ public class Product {
 
     private Long price;
 
-//    @Lob
-//    private String description;
-//
-//    @Lob
-//    @Column(columnDefinition = "longblob")
-//    private byte[] img;
-
     @Lob
-    @Column(columnDefinition = "TEXT") // Utilisation de TEXT pour la description dans PostgreSQL
     private String description;
 
     @Lob
-    @Column(columnDefinition = "bytea") // Utilisation de bytea pour les images binaires dans PostgreSQL
+    @Column(columnDefinition = "longblob")
     private byte[] img;
+
+//    @Lob
+//    @Column(columnDefinition = "TEXT") // Utilisation de TEXT pour la description dans PostgreSQL
+//    private String description;
+//
+//    @Lob
+//    @Column(columnDefinition = "bytea") // Utilisation de bytea pour les images binaires dans PostgreSQL
+//    private byte[] img;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "category_id", nullable = false)
