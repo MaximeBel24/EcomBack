@@ -15,5 +15,9 @@ public class Category {
     private String name;
 
     @Lob
+    @Column(columnDefinition = "TEXT") // Ajout explicite pour PostgreSQL
     private String description;
+
+//    @Lob
+//    private String description;
 }
