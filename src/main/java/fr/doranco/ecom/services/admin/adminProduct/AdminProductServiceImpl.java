@@ -1,4 +1,4 @@
-package fr.doranco.ecom.services.admin.product;
+package fr.doranco.ecom.services.admin.adminProduct;
 
 import fr.doranco.ecom.dto.ProductDto;
 import fr.doranco.ecom.entities.Category;
@@ -55,6 +55,11 @@ public class AdminProductServiceImpl implements AdminProductService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public Optional<Product> getProductById(Long id) {
+        return productRepository.findById(id);
     }
 
 }
