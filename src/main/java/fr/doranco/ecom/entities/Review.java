@@ -1,6 +1,7 @@
 package fr.doranco.ecom.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import fr.doranco.ecom.dto.ReviewDto;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.OnDelete;
@@ -32,4 +33,18 @@ public class Review {
     @JoinColumn(name = "product_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Product product;
+
+    public ReviewDto getDto(){
+        ReviewDto reviewDto = new ReviewDto();
+
+        reviewDto.setId(id);
+        reviewDto.setRating(rating);
+        reviewDto.setDescription(description);
+        reviewDto.setReturnedImg(img);
+        reviewDto.setProductId(product.getId());
+        reviewDto.setUserId(user.getId());
+        reviewDto.setUsername(user.getName());
+
+        return reviewDto;
+    }
 }
