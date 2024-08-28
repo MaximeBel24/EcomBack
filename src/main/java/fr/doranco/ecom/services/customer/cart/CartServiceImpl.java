@@ -152,6 +152,7 @@ public class CartServiceImpl implements CartService{
         return null;
     }
 
+    @Override
     public OrderDto decreaseProductQuantity(AddProductInCartDto addProductInCartDto){
         Order activeOrder = orderRepository.findByUserIdAndOrderStatus(addProductInCartDto.getUserId(), OrderStatus.Pending);
         Optional<Product> optionalProduct = productRepository.findById(addProductInCartDto.getProductId());
@@ -184,6 +185,7 @@ public class CartServiceImpl implements CartService{
         return null;
     }
 
+    @Override
     public OrderDto placeOrder(PlaceOrderDto placeOrderDto){
         Order activeOrder = orderRepository.findByUserIdAndOrderStatus(placeOrderDto.getUserId(), OrderStatus.Pending);
         Optional<User> optionalUser = userRepository.findById(placeOrderDto.getUserId());
@@ -210,10 +212,21 @@ public class CartServiceImpl implements CartService{
         return null;
     }
 
+    @Override
     public List<OrderDto> getMyPlacedOrders(Long userId){
         List<OrderStatus> orderStatusList = List.of(OrderStatus.Placed, OrderStatus.Shipped, OrderStatus.Delivered);
 
         return orderRepository.findAllByUserIdAndOrderStatusIn(userId, orderStatusList).
                 stream().map(Order::getOrderDto).toList();
+    }
+
+    @Override
+    public OrderDto searchOrderByTrackingId(UUID trackingId){
+        Optional<Order> optionalOrder = orderRepository.findByTrackingId(trackingId);
+
+        if(optionalOrder.isPresent()){
+            return optionalOrder.get().getOrderDto();
+        }
+        return null;
     }
 }
