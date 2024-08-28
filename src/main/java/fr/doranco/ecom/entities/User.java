@@ -25,7 +25,4 @@ public class User {
     @Column(columnDefinition = "longblob")
     private byte[] img;
 
-//    @Column(name = "img", columnDefinition = "bytea")
-//    private byte[] img;
-
 }
