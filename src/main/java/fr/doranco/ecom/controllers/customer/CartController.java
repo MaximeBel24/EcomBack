@@ -2,6 +2,7 @@ package fr.doranco.ecom.controllers.customer;
 
 import fr.doranco.ecom.dto.AddProductInCartDto;
 import fr.doranco.ecom.dto.OrderDto;
+import fr.doranco.ecom.dto.PlaceOrderDto;
 import fr.doranco.ecom.exceptions.ValidationException;
 import fr.doranco.ecom.services.customer.cart.CartService;
 import lombok.RequiredArgsConstructor;
@@ -47,5 +48,8 @@ public class CartController {
         return ResponseEntity.status(HttpStatus.CREATED).body(cartService.decreaseProductQuantity(addProductInCartDto));
     }
 
-
+    @PostMapping("/placeOrder")
+    public ResponseEntity<OrderDto> placeOrder(@RequestBody PlaceOrderDto placeOrderDto){
+        return ResponseEntity.status(HttpStatus.CREATED).body(cartService.placeOrder(placeOrderDto));
+    }
 }
