@@ -41,7 +41,7 @@ public class AdminProductController {
         return ResponseEntity.ok(productDtos);
     }
 
-    @DeleteMapping("/product/{productId}")
+    @DeleteMapping("/delete/{productId}")
     public ResponseEntity<Void> deleteProduct(@PathVariable Long productId){
         boolean deleted = adminProductService.deleteProduct(productId);
         if (deleted) {
@@ -65,7 +65,7 @@ public class AdminProductController {
         }
     }
 
-    @PutMapping("/product/{productId}")
+    @PutMapping("/update/{productId}")
     public ResponseEntity<ProductDto> updateProduct(
             @PathVariable Long productId,
             @ModelAttribute ProductDto productDto) throws IOException {
