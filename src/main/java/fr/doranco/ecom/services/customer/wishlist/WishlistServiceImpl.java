@@ -10,6 +10,7 @@ import fr.doranco.ecom.repositories.WishlistRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -22,6 +23,7 @@ public class WishlistServiceImpl implements WishlistService{
 
     private final ProductRepository productRepository;
 
+    @Override
     public WishlistDto addProductToWishlist(WishlistDto wishlistDto){
         Optional<Product> optionalProduct = productRepository.findById(wishlistDto.getProductId());
         Optional<User> optionalUser = userRepository.findById(wishlistDto.getUserId());
@@ -34,5 +36,9 @@ public class WishlistServiceImpl implements WishlistService{
             return wishlistRepository.save(wishlist).getWishlistDto();
         }
         return null;
+    }
+
+    public List<WishlistDto> getWishlistByUserId(Long userId){
+        return wishlistRepository.findAllByUserId(userId).stream().map(Wishlist::getWishlistDto).toList();
     }
 }
