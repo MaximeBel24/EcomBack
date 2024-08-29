@@ -156,7 +156,6 @@ public class CartServiceImpl implements CartService{
     public OrderDto decreaseProductQuantity(AddProductInCartDto addProductInCartDto){
         Order activeOrder = orderRepository.findByUserIdAndOrderStatus(addProductInCartDto.getUserId(), OrderStatus.Pending);
         Optional<Product> optionalProduct = productRepository.findById(addProductInCartDto.getProductId());
-
         Optional<CartItems> optionalCartItem = cartItemsRepository.findByProductIdAndOrderIdAndUserId(
                 addProductInCartDto.getProductId(), activeOrder.getId(), addProductInCartDto.getUserId()
         );
@@ -186,31 +185,45 @@ public class CartServiceImpl implements CartService{
     }
 
     @Override
-    public OrderDto placeOrder(PlaceOrderDto placeOrderDto){
+    public OrderDto placeOrder(PlaceOrderDto placeOrderDto) {
+        // Rechercher la commande en cours (Pending) pour l'utilisateur
         Order activeOrder = orderRepository.findByUserIdAndOrderStatus(placeOrderDto.getUserId(), OrderStatus.Pending);
+
+        if (activeOrder == null) {
+            // Gérer le cas où aucune commande en cours n'est trouvée (optionnel : lancer une exception)
+            throw new IllegalStateException("No pending order found for user ID: " + placeOrderDto.getUserId());
+        }
+
+        // Vérifier que l'utilisateur existe
         Optional<User> optionalUser = userRepository.findById(placeOrderDto.getUserId());
-        if (optionalUser.isPresent()){
+        if (optionalUser.isPresent()) {
+            // Mettre à jour la commande active avec les détails de la commande
             activeOrder.setOrderDescription(placeOrderDto.getOrderDescription());
             activeOrder.setAddress(placeOrderDto.getAddress());
             activeOrder.setDate(new Date());
             activeOrder.setOrderStatus(OrderStatus.Placed);
             activeOrder.setTrackingId(UUID.randomUUID());
 
+            // Enregistrer les modifications sur la commande active
             orderRepository.save(activeOrder);
 
-            Order order = new Order();
-            order.setAmount(0L);
-            order.setTotalAmount(0L);
-            order.setDiscount(0L);
-            order.setUser(optionalUser.get());
-            order.setOrderStatus(OrderStatus.Pending);
-            orderRepository.save(order);
+            // Créer une nouvelle commande avec l'état Pending pour l'utilisateur
+            Order newOrder = new Order();
+            newOrder.setAmount(0L);
+            newOrder.setTotalAmount(0L);
+            newOrder.setDiscount(0L);
+            newOrder.setUser(optionalUser.get());
+            newOrder.setOrderStatus(OrderStatus.Pending);
+            orderRepository.save(newOrder);
 
+            // Retourner l'objet DTO de la commande placée
             return activeOrder.getOrderDto();
-
         }
+
+        // Retourner null si l'utilisateur n'existe pas
         return null;
     }
+
 
     @Override
     public List<OrderDto> getMyPlacedOrders(Long userId){
