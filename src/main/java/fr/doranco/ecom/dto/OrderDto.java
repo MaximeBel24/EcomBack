@@ -31,7 +31,9 @@ public class OrderDto {
 
     private UUID trackingId;
 
-    private String userName;
+    private String userFirstName;
+
+    private String userLastName;
 
     private List<CartItemsDto> cartItems;
 

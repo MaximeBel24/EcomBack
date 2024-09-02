@@ -29,7 +29,8 @@ public class AuthServiceImpl implements AuthService{
         User user = new User();
 
         user.setEmail(signupRequest.getEmail());
-        user.setName(signupRequest.getName());
+        user.setFirstName(signupRequest.getFirstName());
+        user.setLastName(signupRequest.getLastName());
         user.setPassword(new BCryptPasswordEncoder().encode(signupRequest.getPassword()));
         user.setRole(UserRole.CUSTOMER);
         User createdUser = userRepository.save(user);
@@ -60,7 +61,8 @@ public class AuthServiceImpl implements AuthService{
         if(null == adminAccount){
             User user = new User();
             user.setEmail("admin@test.com");
-            user.setName("admin");
+            user.setFirstName("admin");
+            user.setLastName("admin");
             user.setRole(UserRole.ADMIN);
             user.setPassword(new BCryptPasswordEncoder().encode("admin"));
             userRepository.save(user);

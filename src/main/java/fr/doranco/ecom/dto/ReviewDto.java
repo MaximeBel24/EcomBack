@@ -20,5 +20,7 @@ public class ReviewDto {
 
     private Long productId;
 
-    private String username;
+    private String userFirstName;
+
+    private String userLastName;
 }
