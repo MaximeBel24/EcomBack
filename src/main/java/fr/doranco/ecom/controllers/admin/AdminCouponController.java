@@ -31,4 +31,14 @@ public class AdminCouponController {
     public ResponseEntity<List<Coupon>> getAllCoupons(){
         return ResponseEntity.ok(adminCouponService.getAllCoupons());
     }
+
+    @DeleteMapping("/delete/{couponId}")
+    public ResponseEntity<Void> deleteCoupon(@PathVariable Long couponId){
+        boolean deleted = adminCouponService.deleteCoupon(couponId);
+        if (deleted) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.notFound().build();
+    }
+
 }

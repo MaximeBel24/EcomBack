@@ -12,6 +12,8 @@ public interface CartService {
 
     ResponseEntity<?> addProductToCart(AddProductInCartDto addProductInCartDto);
 
+    boolean deleteProductToCart(Long productId);
+
     OrderDto getCartByUserId(Long userId);
 
     OrderDto applyCoupon(Long userId, String code);

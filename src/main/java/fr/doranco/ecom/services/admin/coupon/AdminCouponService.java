@@ -12,4 +12,6 @@ public interface AdminCouponService{
     Coupon createCoupon(Coupon coupon);
 
     List<Coupon> getAllCoupons();
+
+    boolean deleteCoupon(Long id);
 }

@@ -21,6 +21,7 @@ public class CartController {
 
     @PostMapping("/cart")
     public ResponseEntity<?> addProductToCart(@RequestBody AddProductInCartDto addProductInCartDto){
+        System.out.println("Ta mère la reine des tchoin enculé                       ");
         return cartService.addProductToCart(addProductInCartDto);
     }
 

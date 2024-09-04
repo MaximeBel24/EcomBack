@@ -75,6 +75,11 @@ public class CartServiceImpl implements CartService{
     }
 
     @Override
+    public boolean deleteProductToCart(Long productId) {
+        return false;
+    }
+
+    @Override
     public OrderDto getCartByUserId(Long userId){
         Order activeOrder = orderRepository.findByUserIdAndOrderStatus(userId, OrderStatus.Pending);
         List<CartItemsDto> cartItemsDtoList = activeOrder.getCartItems().stream().map(CartItems::getCartDto).toList();
