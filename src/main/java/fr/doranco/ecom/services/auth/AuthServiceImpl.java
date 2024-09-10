@@ -8,10 +8,13 @@ import fr.doranco.ecom.enums.OrderStatus;
 import fr.doranco.ecom.enums.UserRole;
 import fr.doranco.ecom.repositories.OrderRepository;
 import fr.doranco.ecom.repositories.UserRepository;
+import fr.doranco.ecom.utils.DateUtil;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
 
 @Service
 public class AuthServiceImpl implements AuthService{
@@ -33,15 +36,9 @@ public class AuthServiceImpl implements AuthService{
         user.setLastName(signupRequest.getLastName());
         user.setPassword(new BCryptPasswordEncoder().encode(signupRequest.getPassword()));
         user.setRole(UserRole.CUSTOMER);
+        user.setCreatedAt(DateUtil.convertLocalDateToDate(LocalDate.now()));
         User createdUser = userRepository.save(user);
 
-        Order order = new Order();
-        order.setAmount(0L);
-        order.setTotalAmount(0L);
-        order.setDiscount(0L);
-        order.setUser(createdUser);
-        order.setOrderStatus(OrderStatus.Pending);
-        orderRepository.save(order);
 
         UserDto userDto = new UserDto();
         userDto.setId(createdUser.getId());

@@ -30,34 +30,51 @@ public class SimpleCorsFilter implements Filter {
 
     private List<String> allowedOrigins;
 
+//    @Override
+//    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
+//            throws IOException, ServletException {
+//        HttpServletResponse response = (HttpServletResponse) servletResponse;
+//        HttpServletRequest request = (HttpServletRequest) servletRequest;
+//
+//        if (allowedOrigins == null) {
+//            allowedOrigins = Arrays.asList(clientAppUrl);
+//        }
+//
+//        String originHeader = request.getHeader("Origin");
+//
+//        if (allowedOrigins.contains(originHeader)) {
+//            response.setHeader("Access-Control-Allow-Origin", originHeader);
+//            logger.info("CORS request from allowed origin: " + originHeader);
+//        } else {
+//            logger.warn("CORS request from disallowed origin: " + originHeader);
+//        }
+//
+//        response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, OPTIONS, DELETE");
+//        response.setHeader("Access-Control-Max-Age", "3600");
+//        response.setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type, Accept, X-Requested-With, remember-me");
+//        response.setHeader("Access-Control-Allow-Credentials", "true");
+//
+//        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+//            response.setStatus(HttpServletResponse.SC_OK);
+//        } else {
+//            filterChain.doFilter(request, response);
+//        }
+//    }
+
     @Override
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
-            throws IOException, ServletException {
-        HttpServletResponse response = (HttpServletResponse) servletResponse;
-        HttpServletRequest request = (HttpServletRequest) servletRequest;
+    public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
+        HttpServletResponse response = (HttpServletResponse) res;
+        HttpServletRequest request = (HttpServletRequest) req;
 
-        if (allowedOrigins == null) {
-            allowedOrigins = Arrays.asList(clientAppUrl);
-        }
-
-        String originHeader = request.getHeader("Origin");
-
-        if (allowedOrigins.contains(originHeader)) {
-            response.setHeader("Access-Control-Allow-Origin", originHeader);
-            logger.info("CORS request from allowed origin: " + originHeader);
-        } else {
-            logger.warn("CORS request from disallowed origin: " + originHeader);
-        }
-
-        response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, OPTIONS, DELETE");
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, PUT");
         response.setHeader("Access-Control-Max-Age", "3600");
-        response.setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type, Accept, X-Requested-With, remember-me");
-        response.setHeader("Access-Control-Allow-Credentials", "true");
+        response.setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type, Accept");
 
         if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
             response.setStatus(HttpServletResponse.SC_OK);
         } else {
-            filterChain.doFilter(request, response);
+            chain.doFilter(req, res);
         }
     }
 

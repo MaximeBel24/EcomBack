@@ -13,17 +13,16 @@ import java.util.UUID;
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
 
-    Order findByUserIdAndOrderStatus(Long userId, OrderStatus orderStatus);
-
-    List<Order> findAllByOrderStatusIn(List<OrderStatus> orderStatusList);
-
-    List<Order> findAllByUserIdAndOrderStatusIn(Long userId, List<OrderStatus> orderStatusList);
-
-    Optional<Order> findByTrackingId(UUID trackingId);
-
-    Long countByOrderStatus(OrderStatus status);
-
-    List<Order> findByDateBetweenAndOrderStatus(Date startOfMonth, Date endOfMonth, OrderStatus orderStatus);
+//    Order findByUserIdAndOrderStatus(Long userId, OrderStatus orderStatus);
+//
+//    List<Order> findAllByOrderStatusIn(List<OrderStatus> orderStatusList);
+//
+//    List<Order> findAllByUserIdAndOrderStatusIn(Long userId, List<OrderStatus> orderStatusList);
+//
+//
+//    Long countByOrderStatus(OrderStatus status);
+//
+//    List<Order> findByDateBetweenAndOrderStatus(Date startOfMonth, Date endOfMonth, OrderStatus orderStatus);
 
     List<Order> findAllByUserId(Long userId);
 }
