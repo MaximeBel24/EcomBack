@@ -1,26 +1,34 @@
 package fr.doranco.ecom.entities;
 
-import fr.doranco.ecom.dto.FAQDto;
+import fr.doranco.ecom.dto.CartItemsDto;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Data
-public class FAQ {
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+public class CartItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String question;
-
-    private String answer;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "cart_id", nullable = false)
+    private Cart cart;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "product_id", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private Product product;
 
+    private Integer quantity;
+
+    private Long price;
+
+    private Long totalPrice;
 }

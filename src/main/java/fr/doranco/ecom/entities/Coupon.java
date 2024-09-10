@@ -1,13 +1,17 @@
 package fr.doranco.ecom.entities;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.util.Date;
 
 @Entity
 @Data
 @Table(name = "coupons")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Coupon {
 
     @Id

@@ -28,7 +28,7 @@ public class CartServiceImpl implements CartService{
     private UserRepository userRepository;
 
     @Autowired
-    private CartItemsRepository cartItemsRepository;
+    private CartItemRepository cartItemsRepository;
 
     @Autowired
     private ProductRepository productRepository;
@@ -39,7 +39,7 @@ public class CartServiceImpl implements CartService{
     @Override
     public ResponseEntity<?> addProductToCart(AddProductInCartDto addProductInCartDto){
         Order activeOrder = orderRepository.findByUserIdAndOrderStatus(addProductInCartDto.getUserId(), OrderStatus.Pending);
-        Optional<CartItems> optionalCartItems = cartItemsRepository.findByProductIdAndOrderIdAndUserId(
+        Optional<CartItem> optionalCartItems = cartItemsRepository.findByProductIdAndOrderIdAndUserId(
                 addProductInCartDto.getProductId(),
                 activeOrder.getId(),
                 addProductInCartDto.getUserId()
@@ -52,14 +52,14 @@ public class CartServiceImpl implements CartService{
             Optional<User> optionalUser = userRepository.findById(addProductInCartDto.getUserId());
 
             if(optionalProduct.isPresent() && optionalUser.isPresent()){
-                CartItems cart = new CartItems();
+                CartItem cart = new CartItem();
                 cart.setProduct(optionalProduct.get());
                 cart.setPrice(optionalProduct.get().getPrice());
                 cart.setQuantity(1L);
                 cart.setUser(optionalUser.get());
                 cart.setOrder(activeOrder);
 
-                CartItems updatedCart = cartItemsRepository.save(cart);
+                CartItem updatedCart = cartItemsRepository.save(cart);
 
                 activeOrder.setTotalAmount(activeOrder.getTotalAmount() + cart.getPrice());
                 activeOrder.setAmount(activeOrder.getAmount() + cart.getPrice());
@@ -82,7 +82,7 @@ public class CartServiceImpl implements CartService{
     @Override
     public OrderDto getCartByUserId(Long userId){
         Order activeOrder = orderRepository.findByUserIdAndOrderStatus(userId, OrderStatus.Pending);
-        List<CartItemsDto> cartItemsDtoList = activeOrder.getCartItems().stream().map(CartItems::getCartDto).toList();
+        List<CartItemsDto> cartItemsDtoList = activeOrder.getCartItems().stream().map(CartItem::getCartDto).toList();
         OrderDto orderDto = new OrderDto();
         orderDto.setAmount(activeOrder.getAmount());
         orderDto.setId(activeOrder.getId());
@@ -129,12 +129,12 @@ public class CartServiceImpl implements CartService{
         Order activeOrder = orderRepository.findByUserIdAndOrderStatus(addProductInCartDto.getUserId(), OrderStatus.Pending);
         Optional<Product> optionalProduct = productRepository.findById(addProductInCartDto.getProductId());
 
-        Optional<CartItems> optionalCartItem = cartItemsRepository.findByProductIdAndOrderIdAndUserId(
+        Optional<CartItem> optionalCartItem = cartItemsRepository.findByProductIdAndOrderIdAndUserId(
                 addProductInCartDto.getProductId(), activeOrder.getId(), addProductInCartDto.getUserId()
         );
 
         if(optionalProduct.isPresent() && optionalCartItem.isPresent()){
-            CartItems cartItem = optionalCartItem.get();
+            CartItem cartItem = optionalCartItem.get();
             Product product = optionalProduct.get();
 
             activeOrder.setAmount(activeOrder.getAmount() + product.getPrice());
@@ -161,12 +161,12 @@ public class CartServiceImpl implements CartService{
     public OrderDto decreaseProductQuantity(AddProductInCartDto addProductInCartDto){
         Order activeOrder = orderRepository.findByUserIdAndOrderStatus(addProductInCartDto.getUserId(), OrderStatus.Pending);
         Optional<Product> optionalProduct = productRepository.findById(addProductInCartDto.getProductId());
-        Optional<CartItems> optionalCartItem = cartItemsRepository.findByProductIdAndOrderIdAndUserId(
+        Optional<CartItem> optionalCartItem = cartItemsRepository.findByProductIdAndOrderIdAndUserId(
                 addProductInCartDto.getProductId(), activeOrder.getId(), addProductInCartDto.getUserId()
         );
 
         if(optionalProduct.isPresent() && optionalCartItem.isPresent()){
-            CartItems cartItem = optionalCartItem.get();
+            CartItem cartItem = optionalCartItem.get();
             Product product = optionalProduct.get();
 
             activeOrder.setAmount(activeOrder.getAmount() - product.getPrice());

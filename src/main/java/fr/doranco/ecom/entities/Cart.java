@@ -1,22 +1,19 @@
 package fr.doranco.ecom.entities;
 
-import fr.doranco.ecom.dto.OrderDto;
-import fr.doranco.ecom.enums.OrderStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 @Entity
-@Table(name = "orders")
+@Table(name = "carts")
 @Data
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Order {
+public class Cart {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,13 +23,12 @@ public class Order {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    private Date orderDate;
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<CartItem> cartItems;
 
-    private Long totalAmount;
+    private Long totalPrice;
 
-    private OrderStatus orderStatus;
+    private Date createdAt;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<OrderItem> orderItems;
+    private Date updatedAt;
 }
-

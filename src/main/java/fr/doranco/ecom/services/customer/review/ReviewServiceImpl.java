@@ -37,7 +37,7 @@ public class ReviewServiceImpl implements ReviewService{
             orderedProductsResponseDto.setOrderAmount(optionalOrder.get().getAmount());
 
             List<ProductDto> productDtoList = new ArrayList<>();
-            for (CartItems cartItems : optionalOrder.get().getCartItems()){
+            for (CartItem cartItems : optionalOrder.get().getCartItems()){
                 ProductDto productDto = new ProductDto();
 
                 productDto.setId(cartItems.getProduct().getId());

@@ -3,12 +3,18 @@ package fr.doranco.ecom.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import fr.doranco.ecom.dto.ReviewDto;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import java.util.Date;
+
 @Entity
 @Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Review {
 
     @Id
@@ -34,18 +40,6 @@ public class Review {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Product product;
 
-    public ReviewDto getDto(){
-        ReviewDto reviewDto = new ReviewDto();
-
-        reviewDto.setId(id);
-        reviewDto.setRating(rating);
-        reviewDto.setDescription(description);
-        reviewDto.setReturnedImg(img);
-        reviewDto.setProductId(product.getId());
-        reviewDto.setUserId(user.getId());
-        reviewDto.setUserFirstName(user.getFirstName());
-        reviewDto.setUserLastName(user.getLastName());
-
-        return reviewDto;
-    }
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date reviewDate;
 }
