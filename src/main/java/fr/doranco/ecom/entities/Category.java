@@ -1,10 +1,13 @@
 package fr.doranco.ecom.entities;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -25,11 +28,16 @@ public class Category {
     @Lob
     private String description;
 
-    @JsonIgnore
+//    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_category_id")
     private Category parentCategory;
 
+//    @JsonManagedReference
     @OneToMany(mappedBy = "parentCategory", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Category> subCategories;
+    private List<Category> subCategories = new ArrayList<>();
+
+//    @JsonManagedReference
+    @OneToMany(mappedBy = "category")
+    private List<Product> products = new ArrayList<>();
 }

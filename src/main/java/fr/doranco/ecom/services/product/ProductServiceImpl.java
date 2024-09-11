@@ -1,68 +1,100 @@
 package fr.doranco.ecom.services.product;
 
+import fr.doranco.ecom.dto.ProductDto;
+import fr.doranco.ecom.entities.Category;
 import fr.doranco.ecom.entities.Product;
 import fr.doranco.ecom.exceptions.ProductException;
+import fr.doranco.ecom.repositories.CategoryRepository;
 import fr.doranco.ecom.repositories.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class ProductServiceImpl implements ProductService{
+public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
 
-    @Override
-    public List<Product> getAllProducts() {
-        return productRepository.findAll();
+    private ProductDto convertToDto(Product product) {
+        ProductDto dto = new ProductDto();
+        dto.setId(product.getId());
+        dto.setName(product.getName());
+        dto.setPrice(product.getPrice());
+        dto.setDescription(product.getDescription());
+        dto.setStock(product.getStock());
+        dto.setCategoryId(product.getCategory().getId());
+        return dto;
     }
 
     @Override
-    public Optional<Product> getProductById(Long id) {
-        return productRepository.findById(id);
+    public List<ProductDto> getAllProducts() {
+        return productRepository.findAll().stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public List<Product> searchProductsByName(String name) {
-        return productRepository.findAllByNameContaining(name);
+    public ProductDto getProductById(Long id) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new ProductException("Product not found"));
+        return convertToDto(product);
     }
 
     @Override
-    public List<Product> getProductsByCategory(Long categoryId) {
-        return productRepository.findByCategoryId(categoryId);
+    public List<ProductDto> searchProductsByName(String name) {
+        return productRepository.findAllByNameContaining(name).stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Product createProduct(Product product) {
-        return productRepository.save(product);
+    public List<ProductDto> getProductsByCategory(Long categoryId) {
+        return productRepository.findByCategoryId(categoryId).stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Product updateProduct(Long id, Product product) {
-        Optional<Product> existingProduct = productRepository.findById(id);
-        if (existingProduct.isPresent()) {
-            Product updatedProduct = existingProduct.get();
-            updatedProduct.setName(product.getName());
-            updatedProduct.setPrice(product.getPrice());
-            updatedProduct.setDescription(product.getDescription());
-            updatedProduct.setImg(product.getImg());
-            updatedProduct.setStock(product.getStock());
-            updatedProduct.setCategory(product.getCategory());
-            return productRepository.save(updatedProduct);
-        } else {
-            throw new ProductException("Produit introuvable avec l'ID : " + id);
-        }
+    public ProductDto createProduct(ProductDto productDto) {
+        Product product = new Product();
+        product.setName(productDto.getName());
+        product.setPrice(productDto.getPrice());
+        product.setDescription(productDto.getDescription());
+        product.setStock(productDto.getStock());
+
+        Category category = categoryRepository.findById(productDto.getCategoryId())
+                .orElseThrow(() -> new ProductException("Category not found"));
+        product.setCategory(category);
+
+        return convertToDto(productRepository.save(product));
+    }
+
+    @Override
+    public ProductDto updateProduct(Long id, ProductDto productDto) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new ProductException("Product not found"));
+
+        product.setName(productDto.getName());
+        product.setPrice(productDto.getPrice());
+        product.setDescription(productDto.getDescription());
+        product.setStock(productDto.getStock());
+
+        Category category = categoryRepository.findById(productDto.getCategoryId())
+                .orElseThrow(() -> new ProductException("Category not found"));
+        product.setCategory(category);
+
+        return convertToDto(productRepository.save(product));
     }
 
     @Override
     public void deleteProduct(Long id) {
-        if (productRepository.existsById(id)) {
-            productRepository.deleteById(id);
-        } else {
-            throw new ProductException("Produit introuvable avec l'ID : " + id);
+        if (!productRepository.existsById(id)) {
+            throw new ProductException("Product not found");
         }
+        productRepository.deleteById(id);
     }
 }

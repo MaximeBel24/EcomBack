@@ -1,5 +1,6 @@
 package fr.doranco.ecom.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import fr.doranco.ecom.dto.ProductDto;
 import jakarta.persistence.*;
@@ -35,12 +36,13 @@ public class Product {
 
     private Integer stock;
 
+//    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "category_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonIgnore
     private Category category;
 
+//    @JsonIgnore
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Review> reviews;
 }

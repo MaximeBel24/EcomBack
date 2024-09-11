@@ -1,22 +1,14 @@
 package fr.doranco.ecom.services.category;
 
-import fr.doranco.ecom.entities.Category;
-
+import fr.doranco.ecom.dto.CategoryDto;
 import java.util.List;
-import java.util.Optional;
 
 public interface CategoryService {
-    Category createCategory(Category category);
-
-    Category updateCategory(Long id, Category updatedCategory);
-
+    CategoryDto createCategory(CategoryDto categoryDto);
+    CategoryDto updateCategory(Long id, CategoryDto updatedCategoryDto);
     void deleteCategory(Long id);
-
-    Optional<Category> getCategoryById(Long id);
-
-    List<Category> getAllCategories();
-
-    Category getCategoryByName(String name);
-
-    List<Category> getSubCategories(Long parentCategoryId);
+    CategoryDto getCategoryById(Long id);
+    List<CategoryDto> getAllCategories();
+    CategoryDto getCategoryByName(String name);
+    List<CategoryDto> getSubCategories(Long parentCategoryId);
 }
