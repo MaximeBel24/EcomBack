@@ -13,6 +13,7 @@ import fr.doranco.ecom.repositories.CartRepository;
 import fr.doranco.ecom.repositories.ProductRepository;
 import fr.doranco.ecom.repositories.UserRepository;
 import fr.doranco.ecom.utils.DateUtil;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -127,6 +128,22 @@ public class CartServiceImpl implements CartService {
     public CartDto getCartByUserId(Long userId) {
         Cart cart = cartRepository.findByUserId(userId);
         return convertToDto(cart);
+    }
+
+    @Override
+    @Transactional
+    public void clearCart(Long cartId) {
+        Cart cart = cartRepository.findById(cartId)
+                .orElseThrow(() -> new CartException("Panier introuvable"));
+
+        // Supprimer tous les articles du panier
+        cart.getCartItems().clear();
+
+        // Remettre le total du panier à zéro
+        cart.setTotalPrice(0L);
+
+        // Sauvegarder les changements
+        cartRepository.save(cart);
     }
 
     public void updateCartTotalPrice(Cart cart) {

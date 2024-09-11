@@ -13,4 +13,6 @@ public interface CartService {
     Optional<CartDto> getCartById(Long id);
     List<CartDto> getAllCarts();
     CartDto getCartByUserId(Long userId);
+
+    void clearCart(Long cartId);
 }
