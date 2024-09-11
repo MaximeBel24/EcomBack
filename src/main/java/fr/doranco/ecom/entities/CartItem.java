@@ -1,10 +1,7 @@
 package fr.doranco.ecom.entities;
 
-import fr.doranco.ecom.dto.CartItemsDto;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Data

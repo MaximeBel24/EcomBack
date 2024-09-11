@@ -28,16 +28,13 @@ public class Category {
     @Lob
     private String description;
 
-//    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_category_id")
     private Category parentCategory;
 
-//    @JsonManagedReference
     @OneToMany(mappedBy = "parentCategory", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Category> subCategories = new ArrayList<>();
 
-//    @JsonManagedReference
     @OneToMany(mappedBy = "category")
     private List<Product> products = new ArrayList<>();
 }

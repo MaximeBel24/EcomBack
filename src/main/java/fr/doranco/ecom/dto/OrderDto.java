@@ -1,6 +1,5 @@
 package fr.doranco.ecom.dto;
 
-import fr.doranco.ecom.entities.User;
 import fr.doranco.ecom.enums.OrderStatus;
 import lombok.Data;
 
@@ -35,7 +34,7 @@ public class OrderDto {
 
     private String userLastName;
 
-    private List<CartItemsDto> cartItems;
+    private List<CartItemDto> cartItems;
 
     private String couponName;
 }
