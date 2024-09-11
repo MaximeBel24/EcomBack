@@ -1,26 +1,19 @@
 package fr.doranco.ecom.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.springframework.web.multipart.MultipartFile;
+import lombok.NoArgsConstructor;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class ReviewDto {
 
     private Long id;
-
     private Long rating;
-
     private String description;
-
-    private MultipartFile img;
-
-    private byte[] returnedImg;
-
+    private byte[] img;
     private Long userId;
-
     private Long productId;
-
-    private String userFirstName;
-
-    private String userLastName;
+    private String reviewDate;
 }
