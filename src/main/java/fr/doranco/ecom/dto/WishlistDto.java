@@ -1,21 +1,15 @@
 package fr.doranco.ecom.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class WishlistDto {
 
-    private Long userId;
-
-    private Long productId;
-
     private Long id;
-
-    private String productName;
-
-    private String productDescription;
-
-    private byte[] returnedImg;
-
-    private Long price;
+    private Long userId;
+    private Long productId;
 }
