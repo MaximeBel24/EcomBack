@@ -4,12 +4,15 @@ import fr.doranco.ecom.dto.CartDto;
 import fr.doranco.ecom.dto.CartItemDto;
 import fr.doranco.ecom.entities.Cart;
 import fr.doranco.ecom.entities.CartItem;
+import fr.doranco.ecom.entities.Coupon;
 import fr.doranco.ecom.entities.Product;
 import fr.doranco.ecom.entities.User;
 import fr.doranco.ecom.exceptions.CartException;
+import fr.doranco.ecom.exceptions.CouponException;
 import fr.doranco.ecom.exceptions.ProductException;
 import fr.doranco.ecom.repositories.CartItemRepository;
 import fr.doranco.ecom.repositories.CartRepository;
+import fr.doranco.ecom.repositories.CouponRepository;
 import fr.doranco.ecom.repositories.ProductRepository;
 import fr.doranco.ecom.repositories.UserRepository;
 import fr.doranco.ecom.utils.DateUtil;
@@ -31,6 +34,7 @@ public class CartServiceImpl implements CartService {
     private final CartItemRepository cartItemRepository;
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
+    private final CouponRepository couponRepository;  // Ajout du repository des coupons
 
     @Override
     public CartDto createCart(Long userId) {
@@ -87,7 +91,31 @@ public class CartServiceImpl implements CartService {
         return convertToDto(cart);
     }
 
-    // Méthode pour calculer le prix total du panier
+    @Override
+    public CartDto applyCoupon(Long cartId, String couponCode) {
+        Cart cart = cartRepository.findById(cartId)
+                .orElseThrow(() -> new CartException("Cart not found"));
+
+        Coupon coupon = couponRepository.findByCode(couponCode)
+                .orElseThrow(() -> new CouponException("Coupon not found"));
+
+        // Vérifier si le coupon est expiré
+        if (coupon.getExpirationDate().before(new java.util.Date())) {
+            throw new CouponException("Coupon has expired");
+        }
+
+        // Calculer la réduction
+        Long discount = coupon.getDiscount();
+        Long totalPrice = cart.getTotalPrice();
+        Long discountAmount = totalPrice * discount / 100;
+
+        // Appliquer la réduction
+        cart.setTotalPrice(totalPrice - discountAmount);
+        cartRepository.save(cart);
+
+        return convertToDto(cart);
+    }
+
     private Long calculateCartTotalPrice(Cart cart) {
         return cart.getCartItems().stream()
                 .mapToLong(CartItem::getTotalPrice)

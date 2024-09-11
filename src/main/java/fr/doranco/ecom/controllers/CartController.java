@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -66,4 +67,13 @@ public class CartController {
         CartDto updatedCart = cartService.addCartItem(cartId, productId, quantity);
         return ResponseEntity.ok(updatedCart);
     }
+
+    @PostMapping("/{cartId}/apply-coupon")
+    public ResponseEntity<CartDto> applyCoupon(@PathVariable Long cartId, @RequestBody Map<String, String> couponData) {
+        String couponCode = couponData.get("couponCode");
+        CartDto cartDto = cartService.applyCoupon(cartId, couponCode);
+        return ResponseEntity.ok(cartDto);
+    }
+
+
 }

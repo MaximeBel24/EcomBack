@@ -13,6 +13,6 @@ public interface CartService {
     Optional<CartDto> getCartById(Long id);
     List<CartDto> getAllCarts();
     CartDto getCartByUserId(Long userId);
-
+    CartDto applyCoupon(Long cartId, String couponCode);
     void clearCart(Long cartId);
 }
